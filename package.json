@@ -1,0 +1,8 @@
+{
+  "name": "survey_templateer",
+  "version": "1.0.0",
+  "description": "Survey Service",
+  "main": "app.js",
+  "author": "Dmitry Bondarenko",
+  "license": "MIT"
+}
