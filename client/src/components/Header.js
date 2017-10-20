@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Payments from './Payments';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -15,8 +16,8 @@ class Header extends Component {
                 );
             default:
                 return [
-                    <li key={1}><a>La</a></li>,
-                    <li key={2}><a>La</a></li>,
+                    <li key={1}><a><Payments/></a></li>,
+                    <li key={2} style={{margin: '0 10px'}}><strong>Credits: {this.props.auth.credits}</strong></li>,
                     <li key={3}><a href="/api/logout">Logout</a></li>,
                 ];
         }
