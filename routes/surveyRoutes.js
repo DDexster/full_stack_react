@@ -50,6 +50,12 @@ module.exports = app => {
         }
     });
 
+    app.get('/api/surveys', requireLogin, async (req, res) => {
+        const surveys = await Survey.find({ _user: req.user.id })
+                                    .select({ recipients: false });
+        res.send(surveys);
+    });
+
     app.post('/api/surveys/webhooks', (req, res) => {
         // Create path matcher        
         const p = new Path('/api/surveys/:surveyId/:choice');
