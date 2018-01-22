@@ -9,7 +9,7 @@ const keys = require('../config/keys');
 const Survey = mongoose.model('survey');
 
 module.exports = app => {
-    app.get('/api/surveys/thanks', (req, res) => {
+    app.get('/api/surveys/:surveyID/:choice', (req, res) => {
        res.send("Thank you for your vote!");
     });
 
