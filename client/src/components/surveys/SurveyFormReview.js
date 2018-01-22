@@ -24,13 +24,13 @@ const SurveyFormReview = ({ onBack, formValues, submitSurvey, history }) => {
             </div>
             <div style={{marginTop: '20px'}}>
                 <button
-                className="yellow darken-3 btn-flat white-text"
+                className="yellow darken-3 btn white-text"
                 style={{marginRight: '20px'}}
                 onClick={onBack}>
                 Cancel
                 </button>
                 <button
-                    className="green btn-flat white-text"
+                    className="green btn white-text"
                     onClick={() => submitSurvey(formValues, history)}>
                     Send Survey
                     <i className='material-icons right'>email</i>

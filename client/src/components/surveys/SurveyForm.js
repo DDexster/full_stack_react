@@ -27,10 +27,10 @@ class SurveyForm extends Component {
                 <form style={{ marginTop: '40px' }}
                       onSubmit={this.props.handleSubmit(this.props.onSurveySubmit)}>
                     {this.renderFields()}
-                    <Link to='/surveys' className='red btn-flat left white-text'>
+                    <Link to='/surveys' className='red btn left white-text'>
                         Cancel
                     </Link>
-                    <button type='submit' className='blue btn-flat right white-text'>
+                    <button type='submit' className='blue btn right white-text'>
                         Next
                         <i className='material-icons right'>done</i>
                     </button>
