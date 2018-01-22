@@ -57,7 +57,8 @@ module.exports = app => {
         // Map through webhook events and make an formatted array of usefull data
         // (then) Clear an array fron 'undefined' data
         // (then) Remove duplicate records
-        const events = _.chain(req.body)
+        // (then) Process surveys with claryfied events
+        _.chain(req.body)
             .map(({ email, url }) => {
                 const match = p.test(new URL(url).pathname);
                 if (match) {
@@ -66,7 +67,17 @@ module.exports = app => {
             })
             .compact()
             .uniqBy('email', 'surveyId')
-            .value();
+            .each(({ email, surveyId, choice }) => {
+                Survey.updateOne({
+                    _id: surveyId,
+                    recipients: {
+                        $elemMatch: { email, responded: false }
+                    }
+                }, {
+                    $inc: { [choice]: 1 },
+                    $set: { 'recipients.$.responded': true, lastResponded: new Date() } 
+                }).exec();
+            });
 
         res.status(200);
     });
