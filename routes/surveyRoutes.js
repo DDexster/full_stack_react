@@ -59,32 +59,35 @@ module.exports = app => {
     app.post('/api/surveys/webhooks', (req, res) => {
         // Create path matcher        
         const p = new Path('/api/surveys/:surveyId/:choice');
-        
         // Map through webhook events and make an formatted array of usefull data
-        // (then) Clear an array fron 'undefined' data
+        // (then) Clear an array from 'undefined' data
         // (then) Remove duplicate records
         // (then) Process surveys with claryfied events
         _.chain(req.body)
-            .map(({ email, url }) => {
-                const match = p.test(new URL(url).pathname);
+            .map(body => {
+                const match = p.test(new URL(body.url).pathname);
                 if (match) {
-                    return { email, surveyId: match.surveyId, choice: match.choice }
-                } 
+                    return { email: body.email, surveyId: match.surveyId, choice: match.choice };
+                }
             })
             .compact()
             .uniqBy('email', 'surveyId')
-            .each(({ email, surveyId, choice }) => {
-                Survey.updateOne({
-                    _id: surveyId,
-                    recipients: {
-                        $elemMatch: { email, responded: false }
+            .each(({ surveyId, email, choice }) => {
+                Survey.updateOne(
+                    {
+                        _id: surveyId,
+                        recipients: {
+                            $elemMatch: { email: email, responded: false }
+                        }
+                    },
+                    {
+                        $inc: { [choice]: 1 },
+                        $set: { 'recipients.$.responded': true },
+                        lastResponded: new Date()
                     }
-                }, {
-                    $inc: { [choice]: 1 },
-                    $set: { 'recipients.$.responded': true, lastResponded: new Date() } 
-                }).exec();
-            });
+                ).exec();
+            }).values();
 
-        res.status(200);
+        res.send({});
     });
 }
